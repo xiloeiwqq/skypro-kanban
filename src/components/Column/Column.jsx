@@ -7,8 +7,8 @@ function Column({ title, cards, isFirst = false }) {
         <p>{title}</p>
       </div>
       <div className="cards">
-        {cards.map((category, index) => (
-          <Card key={`${category}-${index}`} category={category} />
+        {cards.map((card) => (
+          <Card key={card.id} card={card} />
         ))}
       </div>
     </div>

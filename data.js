@@ -1,0 +1,15 @@
+const cardsData = [
+  { id: 1, topic: "Web Design", title: "Новый дизайн главной страницы", date: "30.10.23", status: "Без статуса" },
+  { id: 2, topic: "Research", title: "Провести анализ конкурентов", date: "30.10.23", status: "Без статуса" },
+  { id: 3, topic: "Web Design", title: "Подготовить макет страницы", date: "31.10.23", status: "Без статуса" },
+  { id: 4, topic: "Copywriting", title: "Написать тексты для сайта", date: "01.11.23", status: "Без статуса" },
+  { id: 5, topic: "Web Design", title: "Согласовать палитру проекта", date: "02.11.23", status: "Без статуса" },
+  { id: 6, topic: "Research", title: "Собрать требования проекта", date: "03.11.23", status: "Нужно сделать" },
+  { id: 7, topic: "Research", title: "Изучить пользовательский сценарий", date: "04.11.23", status: "В работе" },
+  { id: 8, topic: "Copywriting", title: "Подготовить описание продукта", date: "05.11.23", status: "В работе" },
+  { id: 9, topic: "Web Design", title: "Создать адаптивные экраны", date: "06.11.23", status: "В работе" },
+  { id: 10, topic: "Research", title: "Проверить работу формы", date: "07.11.23", status: "Тестирование" },
+  { id: 11, topic: "Research", title: "Обновить документацию", date: "08.11.23", status: "Готово" },
+];
+
+export default cardsData;

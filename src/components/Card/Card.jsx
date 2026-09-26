@@ -4,15 +4,15 @@ const categoryColors = {
   Copywriting: "purple",
 };
 
-function Card({ category }) {
-  const color = categoryColors[category];
+function Card({ card }) {
+  const color = categoryColors[card.topic];
 
   return (
     <div className="cards__item">
       <div className="cards__card card">
         <div className="card__group">
           <div className={`card__theme _${color}`}>
-            <p className={`_${color}`}>{category}</p>
+            <p className={`_${color}`}>{card.topic}</p>
           </div>
           <a href="#popBrowse" target="_self">
             <div className="card__btn">
@@ -24,13 +24,13 @@ function Card({ category }) {
         </div>
         <div className="card__content">
           <a href="" target="_blank">
-            <h3 className="card__title">Название задачи</h3>
+            <h3 className="card__title">{card.title}</h3>
           </a>
           <div className="card__date">
             <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 13 13" fill="none">
               <path d="M10.5625 2.03125H2.4375C1.7644 2.03125 1.21875 2.5769 1.21875 3.25V10.5625C1.21875 11.2356 1.7644 11.7812 2.4375 11.7812H10.5625C11.2356 11.7812 11.7812 11.2356 11.7812 10.5625V3.25C11.7812 2.5769 11.2356 2.03125 10.5625 2.03125ZM11.7812 4.0625H1.21875M3.25 1.21875V2.03125M9.75 1.21875V2.03125" stroke="#94A6BE" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-            <p>30.10.23</p>
+            <p>{card.date}</p>
           </div>
         </div>
       </div>

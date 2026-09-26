@@ -1,6 +1,9 @@
+import { useState } from "react";
 import PopUser from "../PopUser/PopUser.jsx";
 
 function Header() {
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+
   return (
     <header className="header">
       <div className="container">
@@ -13,8 +16,19 @@ function Header() {
           </div>
           <nav className="header__nav">
             <button className="header__btn-main-new _hover01" id="btnMainNew"><a href="#popNewCard">Создать новую задачу</a></button>
-            <a href="#user-set-target" className="header__user _hover02">Ivan Ivanov</a>
-            <PopUser />
+            <a
+              href="#user-set-target"
+              className="header__user _hover02"
+              aria-expanded={isUserMenuOpen}
+              aria-controls="user-set-target"
+              onClick={(event) => {
+                event.preventDefault();
+                setIsUserMenuOpen((isOpen) => !isOpen);
+              }}
+            >
+              Ivan Ivanov
+            </a>
+            {isUserMenuOpen && <PopUser />}
           </nav>
         </div>
       </div>
