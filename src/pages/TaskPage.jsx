@@ -7,7 +7,7 @@ function TaskPage({ editable = false }) {
 
   return (
     <BoardPage>
-      <PopBrowse taskId={taskId} editable={editable} />
+      <PopBrowse key={taskId} taskId={taskId} editable={editable} />
     </BoardPage>
   );
 }

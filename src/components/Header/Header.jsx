@@ -6,6 +6,8 @@ import { CreateTaskButton, HeaderBlock, HeaderNav, HeaderRoot, Logo, UserToggle 
 
 function Header() {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const displayName = user.name || user.login || "Пользователь";
 
   return (
     <HeaderRoot>
@@ -25,7 +27,7 @@ function Header() {
                 setIsUserMenuOpen((isOpen) => !isOpen);
               }}
             >
-              Ivan Ivanov
+              {displayName}
             </UserToggle>
             {isUserMenuOpen && <PopUser />}
           </HeaderNav>

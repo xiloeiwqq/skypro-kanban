@@ -34,3 +34,24 @@ export const LoadingText = styled.p`
   font-size: 16px;
   text-align: center;
 `;
+
+export const ErrorMessage = styled.div`
+  display: flex;
+  width: 100%;
+  min-height: calc(100vh - 134px);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  color: #c0392b;
+  font-size: 14px;
+  text-align: center;
+
+  button {
+    padding: 8px 14px;
+    border: 0;
+    border-radius: 4px;
+    background: #565eef;
+    color: #ffffff;
+  }
+`;

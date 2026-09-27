@@ -5,7 +5,8 @@ function PopExit() {
   const navigate = useNavigate();
 
   function handleLogout() {
-    localStorage.removeItem("isAuthenticated");
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
     navigate("/login", { replace: true });
   }
 

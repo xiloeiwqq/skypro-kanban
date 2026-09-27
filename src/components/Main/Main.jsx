@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import cardsData from "../../../data.js";
+import { useEffect } from "react";
 import { Container } from "../../App.styled.js";
+import { useTasks } from "../../useTasks.js";
 import Column from "../Column/Column.jsx";
-import { LoadingText, MainBlock, MainContent, MainRoot } from "./Main.styled.js";
+import { ErrorMessage, LoadingText, MainBlock, MainContent, MainRoot } from "./Main.styled.js";
 
 const columns = [
   { title: "Без статуса", status: "Без статуса" },
@@ -13,13 +13,11 @@ const columns = [
 ];
 
 function Main() {
-  const [isLoading, setIsLoading] = useState(true);
+  const { tasks, isLoading, error, loadTasks } = useTasks();
 
   useEffect(() => {
-    const loadingTimer = setTimeout(() => setIsLoading(false), 1000);
-
-    return () => clearTimeout(loadingTimer);
-  }, []);
+    loadTasks();
+  }, [loadTasks]);
 
   return (
     <MainRoot>
@@ -28,12 +26,17 @@ function Main() {
           <MainContent>
             {isLoading ? (
               <LoadingText role="status">Данные загружаются</LoadingText>
+            ) : error ? (
+              <ErrorMessage role="alert">
+                <p>{error}</p>
+                <button type="button" onClick={loadTasks}>Повторить</button>
+              </ErrorMessage>
             ) : (
               columns.map((column, index) => (
                 <Column
                   key={column.status}
                   title={column.title}
-                  cards={cardsData.filter((card) => card.status === column.status)}
+                  cards={tasks.filter((card) => card.status === column.status)}
                   isFirst={index === 0}
                 />
               ))

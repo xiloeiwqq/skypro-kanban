@@ -75,6 +75,12 @@ export const AuthPrompt = styled.p`
   text-align: center;
 `;
 
+export const AuthError = styled.p`
+  color: #c0392b;
+  font-size: 13px;
+  line-height: 1.4;
+`;
+
 export const AuthLink = styled(Link)`
   color: #565eef;
   text-decoration: underline;

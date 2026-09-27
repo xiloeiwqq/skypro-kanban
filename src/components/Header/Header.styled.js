@@ -37,6 +37,9 @@ export const HeaderNav = styled.nav`
 `;
 
 export const CreateTaskButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 178px;
   height: 30px;
   margin-right: 20px;

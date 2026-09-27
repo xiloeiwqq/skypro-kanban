@@ -191,6 +191,8 @@ export const CategoryOption = styled.div`
   font-weight: 600;
   line-height: 14px;
   white-space: nowrap;
+  border: 0;
+  cursor: pointer;
   ${({ $topic }) => categoryColors[$topic] || categoryColors["Web Design"]}
 `;
 
@@ -215,4 +217,11 @@ export const CreateButton = styled.button`
     width: 100%;
     height: 40px;
   }
+`;
+
+export const NewError = styled.p`
+  margin: 10px 0;
+  color: #c0392b;
+  font-size: 13px;
+  line-height: 1.4;
 `;

@@ -1,12 +1,15 @@
 import { GlobalStyle, PageWrapper } from "./App.styled.js";
 import AppRoutes from "./pages/AppRoutes.jsx";
+import { TasksProvider } from "./TasksContext.jsx";
 
 function App() {
   return (
     <>
       <GlobalStyle />
       <PageWrapper>
-        <AppRoutes />
+        <TasksProvider>
+          <AppRoutes />
+        </TasksProvider>
       </PageWrapper>
     </>
   );

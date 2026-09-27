@@ -1,5 +1,8 @@
+import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
+import { signUp } from "../api.js";
 import {
+  AuthError,
   AuthForm,
   AuthInput,
   AuthLink,
@@ -12,15 +15,30 @@ import {
 
 function SignUpPage() {
   const navigate = useNavigate();
+  const [name, setName] = useState("");
+  const [login, setLogin] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  if (localStorage.getItem("isAuthenticated") === "true") {
+  if (localStorage.getItem("token")) {
     return <Navigate to="/" replace />;
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
-    localStorage.setItem("isAuthenticated", "true");
-    navigate("/", { replace: true });
+    setError("");
+    setIsSubmitting(true);
+    try {
+      const { user } = await signUp(login, name, password);
+      localStorage.setItem("token", user.token);
+      localStorage.setItem("user", JSON.stringify(user));
+      navigate("/", { replace: true });
+    } catch (requestError) {
+      setError(requestError.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -28,10 +46,11 @@ function SignUpPage() {
       <AuthPanel>
         <AuthTitle>Регистрация</AuthTitle>
         <AuthForm onSubmit={handleSubmit}>
-          <AuthInput type="text" name="name" placeholder="Имя" required />
-          <AuthInput type="email" name="email" placeholder="Эл. почта" required />
-          <AuthInput type="password" name="password" placeholder="Пароль" required />
-          <AuthSubmit type="submit">Зарегистрироваться</AuthSubmit>
+          <AuthInput type="text" name="name" placeholder="Имя" value={name} onChange={(event) => setName(event.target.value)} required />
+          <AuthInput type="email" name="login" placeholder="Эл. почта" value={login} onChange={(event) => setLogin(event.target.value)} required />
+          <AuthInput type="password" name="password" placeholder="Пароль" value={password} onChange={(event) => setPassword(event.target.value)} required />
+          {error && <AuthError role="alert">{error}</AuthError>}
+          <AuthSubmit type="submit" disabled={isSubmitting}>{isSubmitting ? "Регистрируем..." : "Зарегистрироваться"}</AuthSubmit>
         </AuthForm>
         <AuthPrompt>
           Уже есть аккаунт? <AuthLink to="/login">Войдите здесь</AuthLink>

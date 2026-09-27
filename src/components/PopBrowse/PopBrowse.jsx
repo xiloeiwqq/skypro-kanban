@@ -1,5 +1,7 @@
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Calendar from "../Calendar/Calendar.jsx";
+import { useTasks } from "../../useTasks.js";
 import {
   BrowseActions,
   BrowseBottomCategory,
@@ -8,6 +10,7 @@ import {
   BrowseContent,
   BrowseDialog,
   BrowseEditButton,
+  BrowseError,
   BrowseFieldLabel,
   BrowseForm,
   BrowseFormField,
@@ -26,53 +29,133 @@ import {
 } from "./PopBrowse.styled.js";
 
 function PopBrowse({ taskId, editable = false }) {
+  const navigate = useNavigate();
+  const { getTaskById, updateTask, deleteTask } = useTasks();
+  const [task, setTask] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+  const statuses = ["Без статуса", "Нужно сделать", "В работе", "Тестирование", "Готово"];
+
+  useEffect(() => {
+    let isCurrent = true;
+    getTaskById(taskId)
+      .then((loadedTask) => {
+        if (isCurrent) setTask(loadedTask);
+      })
+      .catch((requestError) => {
+        if (isCurrent) setError(requestError.message);
+      })
+      .finally(() => {
+        if (isCurrent) setIsLoading(false);
+      });
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [getTaskById, taskId]);
+
+  async function handleSave(event) {
+    event.preventDefault();
+    setError("");
+    try {
+      await updateTask(taskId, {
+        title: task.title,
+        topic: task.topic,
+        status: task.status,
+        description: task.description || "",
+        date: task.date,
+      });
+      navigate(`/tasks/${taskId}`, { replace: true });
+    } catch (requestError) {
+      setError(requestError.message);
+    }
+  }
+
+  async function handleDelete() {
+    setError("");
+    try {
+      await deleteTask(taskId);
+      navigate("/", { replace: true });
+    } catch (requestError) {
+      setError(requestError.message);
+    }
+  }
+
   return (
     <BrowseOverlay id="popBrowse">
       <BrowseOverlayContent>
         <BrowseDialog>
           <BrowseContent>
-            <BrowseTop>
-              <BrowseTitle>Название задачи</BrowseTitle>
-              <BrowseTopic $topic="Web Design">Web Design</BrowseTopic>
-            </BrowseTop>
-            <BrowseStatus>
-              <BrowseStatusLabel>Статус</BrowseStatusLabel>
-              <BrowseStatusList>
-                <BrowseStatusOption $hidden>Без статуса</BrowseStatusOption>
-                <BrowseStatusOption $active>Нужно сделать</BrowseStatusOption>
-                <BrowseStatusOption $hidden>В работе</BrowseStatusOption>
-                <BrowseStatusOption $hidden>Тестирование</BrowseStatusOption>
-                <BrowseStatusOption $hidden>Готово</BrowseStatusOption>
-              </BrowseStatusList>
-            </BrowseStatus>
-            <BrowseWrap>
-              <BrowseForm id="formBrowseCard" action="#">
-                <BrowseFormField>
-                  <BrowseFieldLabel htmlFor="textArea01">Описание задачи</BrowseFieldLabel>
-                  <BrowseTextArea name="text" id="textArea01" readOnly={!editable} placeholder="Введите описание задачи..." />
-                </BrowseFormField>
-              </BrowseForm>
-              <Calendar mode="browse" />
-            </BrowseWrap>
-            <BrowseBottomCategory>
-              <BrowseTopicLabel>Категория</BrowseTopicLabel>
-              <BrowseTopic $topic="Web Design">Web Design</BrowseTopic>
-            </BrowseBottomCategory>
-            <BrowseActions>
-              <BrowseButtons>
-                <BrowseEditButton as={Link} to={`/tasks/${taskId}/edit`}>Редактировать задачу</BrowseEditButton>
-                <BrowseEditButton as={Link} to="/">Удалить задачу</BrowseEditButton>
-              </BrowseButtons>
-              <BrowseCloseButton as={Link} to="/">Закрыть</BrowseCloseButton>
-            </BrowseActions>
-            <BrowseActions $hidden={!editable}>
-              <BrowseButtons>
-                <BrowseCloseButton as={Link} to={`/tasks/${taskId}`}>Сохранить</BrowseCloseButton>
-                <BrowseEditButton as={Link} to={`/tasks/${taskId}`}>Отменить</BrowseEditButton>
-                <BrowseEditButton as={Link} id="btnDelete" to="/">Удалить задачу</BrowseEditButton>
-              </BrowseButtons>
-              <BrowseCloseButton as={Link} to="/">Закрыть</BrowseCloseButton>
-            </BrowseActions>
+            {isLoading ? (
+              <BrowseTitle>Загружаем задачу...</BrowseTitle>
+            ) : !task ? (
+              <>
+                <BrowseTitle>Не удалось загрузить задачу</BrowseTitle>
+                {error && <BrowseError role="alert">{error}</BrowseError>}
+                <BrowseCloseButton as={Link} to="/">Закрыть</BrowseCloseButton>
+              </>
+            ) : (
+              <>
+                <BrowseTop>
+                  <BrowseTitle>{task.title}</BrowseTitle>
+                  <BrowseTopic $topic={task.topic}>{task.topic}</BrowseTopic>
+                </BrowseTop>
+                <BrowseStatus>
+                  <BrowseStatusLabel>Статус</BrowseStatusLabel>
+                  <BrowseStatusList>
+                    {statuses.map((status) => (
+                      (editable || task.status === status) && (
+                        <BrowseStatusOption
+                          as="button"
+                          type="button"
+                          key={status}
+                          $active={task.status === status}
+                          onClick={() => editable && setTask({ ...task, status })}
+                        >
+                          {status}
+                        </BrowseStatusOption>
+                      )
+                    ))}
+                  </BrowseStatusList>
+                </BrowseStatus>
+                <BrowseWrap>
+                  <BrowseForm id="formBrowseCard" onSubmit={handleSave}>
+                    <BrowseFormField>
+                      <BrowseFieldLabel htmlFor="textArea01">Описание задачи</BrowseFieldLabel>
+                      <BrowseTextArea
+                        name="description"
+                        id="textArea01"
+                        readOnly={!editable}
+                        placeholder="Введите описание задачи..."
+                        value={task.description || ""}
+                        onChange={(event) => setTask({ ...task, description: event.target.value })}
+                      />
+                    </BrowseFormField>
+                  </BrowseForm>
+                  <Calendar mode="browse" />
+                </BrowseWrap>
+                <BrowseBottomCategory>
+                  <BrowseTopicLabel>Категория</BrowseTopicLabel>
+                  <BrowseTopic $topic={task.topic}>{task.topic}</BrowseTopic>
+                </BrowseBottomCategory>
+                {error && <BrowseError role="alert">{error}</BrowseError>}
+                <BrowseActions $hidden={editable}>
+                  <BrowseButtons>
+                    <BrowseEditButton as={Link} to={`/tasks/${taskId}/edit`}>Редактировать задачу</BrowseEditButton>
+                    <BrowseEditButton type="button" onClick={handleDelete}>Удалить задачу</BrowseEditButton>
+                  </BrowseButtons>
+                  <BrowseCloseButton as={Link} to="/">Закрыть</BrowseCloseButton>
+                </BrowseActions>
+                <BrowseActions $hidden={!editable}>
+                  <BrowseButtons>
+                    <BrowseCloseButton as="button" type="submit" form="formBrowseCard">Сохранить</BrowseCloseButton>
+                    <BrowseEditButton as={Link} to={`/tasks/${taskId}`}>Отменить</BrowseEditButton>
+                    <BrowseEditButton type="button" id="btnDelete" onClick={handleDelete}>Удалить задачу</BrowseEditButton>
+                  </BrowseButtons>
+                  <BrowseCloseButton as={Link} to="/">Закрыть</BrowseCloseButton>
+                </BrowseActions>
+              </>
+            )}
           </BrowseContent>
         </BrowseDialog>
       </BrowseOverlayContent>

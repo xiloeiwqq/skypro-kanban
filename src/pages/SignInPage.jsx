@@ -1,6 +1,9 @@
+import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
+import { signIn } from "../api.js";
 import {
   AuthForm,
+  AuthError,
   AuthInput,
   AuthLink,
   AuthPage,
@@ -12,15 +15,29 @@ import {
 
 function SignInPage() {
   const navigate = useNavigate();
+  const [login, setLogin] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  if (localStorage.getItem("isAuthenticated") === "true") {
+  if (localStorage.getItem("token")) {
     return <Navigate to="/" replace />;
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
-    localStorage.setItem("isAuthenticated", "true");
-    navigate("/", { replace: true });
+    setError("");
+    setIsSubmitting(true);
+    try {
+      const { user } = await signIn(login, password);
+      localStorage.setItem("token", user.token);
+      localStorage.setItem("user", JSON.stringify(user));
+      navigate("/", { replace: true });
+    } catch (requestError) {
+      setError(requestError.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -28,9 +45,10 @@ function SignInPage() {
       <AuthPanel>
         <AuthTitle>Вход</AuthTitle>
         <AuthForm onSubmit={handleSubmit}>
-          <AuthInput type="email" name="email" placeholder="Эл. почта" required />
-          <AuthInput type="password" name="password" placeholder="Пароль" required />
-          <AuthSubmit type="submit">Войти</AuthSubmit>
+          <AuthInput type="text" name="login" placeholder="Эл. почта или логин" autoComplete="username" value={login} onChange={(event) => setLogin(event.target.value)} required />
+          <AuthInput type="password" name="password" placeholder="Пароль" value={password} onChange={(event) => setPassword(event.target.value)} required />
+          {error && <AuthError role="alert">{error}</AuthError>}
+          <AuthSubmit type="submit" disabled={isSubmitting}>{isSubmitting ? "Входим..." : "Войти"}</AuthSubmit>
         </AuthForm>
         <AuthPrompt>
           Нужно зарегистрироваться? <AuthLink to="/register">Регистрируйтесь здесь</AuthLink>

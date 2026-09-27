@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Calendar from "../Calendar/Calendar.jsx";
+import { useTasks } from "../../useTasks.js";
 import {
   CategoryLabel,
   CategoryList,
@@ -13,6 +15,7 @@ import {
   NewDialog,
   NewForm,
   NewFormLayout,
+  NewError,
   NewOverlay,
   NewOverlayContent,
   NewTitle,
@@ -21,6 +24,32 @@ import {
 
 function PopNewCard() {
   const navigate = useNavigate();
+  const { createTask } = useTasks();
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [topic, setTopic] = useState("Web Design");
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+    setError("");
+    setIsSubmitting(true);
+    try {
+      await createTask({
+        title: title.trim(),
+        description: description.trim(),
+        topic,
+        status: "Без статуса",
+        date: new Date().toISOString(),
+      });
+      navigate("/", { replace: true });
+    } catch (requestError) {
+      setError(requestError.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
 
   return (
     <NewOverlay id="popNewCard">
@@ -30,25 +59,28 @@ function PopNewCard() {
             <NewTitle>Создание задачи</NewTitle>
             <NewClose as={Link} to="/" aria-label="Закрыть">&#10006;</NewClose>
             <NewFormLayout>
-              <NewForm id="formNewCard" action="#">
+              <NewForm id="formNewCard" onSubmit={handleSubmit}>
                 <FormField>
                   <FieldLabel htmlFor="formTitle">Название задачи</FieldLabel>
-                  <TextInput type="text" name="name" id="formTitle" placeholder="Введите название задачи..." autoFocus />
+                  <TextInput type="text" name="title" id="formTitle" placeholder="Введите название задачи..." value={title} onChange={(event) => setTitle(event.target.value)} required autoFocus />
                 </FormField>
                 <FormField>
                   <FieldLabel htmlFor="textArea">Описание задачи</FieldLabel>
-                  <DescriptionInput name="text" id="textArea" placeholder="Введите описание задачи..." />
+                  <DescriptionInput name="description" id="textArea" placeholder="Введите описание задачи..." value={description} onChange={(event) => setDescription(event.target.value)} />
                 </FormField>
               </NewForm>
               <Calendar />
             </NewFormLayout>
             <CategoryLabel>Категория</CategoryLabel>
             <CategoryList>
-              <CategoryOption $topic="Web Design" $active>Web Design</CategoryOption>
-              <CategoryOption $topic="Research">Research</CategoryOption>
-              <CategoryOption $topic="Copywriting">Copywriting</CategoryOption>
+              {["Web Design", "Research", "Copywriting"].map((category) => (
+                <CategoryOption as="button" type="button" key={category} $topic={category} $active={topic === category} onClick={() => setTopic(category)}>
+                  {category}
+                </CategoryOption>
+              ))}
             </CategoryList>
-            <CreateButton id="btnCreate" type="button" onClick={() => navigate("/")}>Создать задачу</CreateButton>
+            {error && <NewError role="alert">{error}</NewError>}
+            <CreateButton id="btnCreate" type="submit" form="formNewCard" disabled={isSubmitting}>{isSubmitting ? "Создаем..." : "Создать задачу"}</CreateButton>
           </NewContent>
         </NewDialog>
       </NewOverlayContent>

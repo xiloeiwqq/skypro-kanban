@@ -137,6 +137,8 @@ export const BrowseStatusOption = styled.div`
   color: #94a6be;
   font-size: 14px;
   line-height: 1;
+  font-family: inherit;
+  cursor: pointer;
   letter-spacing: -0.14px;
   display: ${({ $hidden }) => ($hidden ? "none" : "block")};
   ${({ $active }) => $active && css`
@@ -308,4 +310,11 @@ export const BrowseCloseButton = styled.button`
   &:hover {
     background-color: #33399b;
   }
+`;
+
+export const BrowseError = styled.p`
+  margin: 12px 0;
+  color: #c0392b;
+  font-size: 13px;
+  line-height: 1.4;
 `;
