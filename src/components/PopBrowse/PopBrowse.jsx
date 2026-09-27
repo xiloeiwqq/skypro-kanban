@@ -1,57 +1,81 @@
 import Calendar from "../Calendar/Calendar.jsx";
+import {
+  BrowseActions,
+  BrowseBottomCategory,
+  BrowseButtons,
+  BrowseCloseButton,
+  BrowseContent,
+  BrowseDialog,
+  BrowseEditButton,
+  BrowseFieldLabel,
+  BrowseForm,
+  BrowseFormField,
+  BrowseOverlay,
+  BrowseOverlayContent,
+  BrowseStatus,
+  BrowseStatusLabel,
+  BrowseStatusList,
+  BrowseStatusOption,
+  BrowseTextArea,
+  BrowseTitle,
+  BrowseTop,
+  BrowseTopic,
+  BrowseTopicLabel,
+  BrowseWrap,
+} from "./PopBrowse.styled.js";
 
 function PopBrowse() {
   return (
-    <div className="pop-browse" id="popBrowse">
-      <div className="pop-browse__container">
-        <div className="pop-browse__block">
-          <div className="pop-browse__content">
-            <div className="pop-browse__top-block">
-              <h3 className="pop-browse__ttl">Название задачи</h3>
-              <div className="categories__theme theme-top _orange _active-category"><p className="_orange">Web Design</p></div>
-            </div>
-            <div className="pop-browse__status status">
-              <p className="status__p subttl">Статус</p>
-              <div className="status__themes">
-                <div className="status__theme _hide"><p>Без статуса</p></div>
-                <div className="status__theme _gray"><p className="_gray">Нужно сделать</p></div>
-                <div className="status__theme _hide"><p>В работе</p></div>
-                <div className="status__theme _hide"><p>Тестирование</p></div>
-                <div className="status__theme _hide"><p>Готово</p></div>
-              </div>
-            </div>
-            <div className="pop-browse__wrap">
-              <form className="pop-browse__form form-browse" id="formBrowseCard" action="#">
-                <div className="form-browse__block">
-                  <label htmlFor="textArea01" className="subttl">Описание задачи</label>
-                  <textarea className="form-browse__area" name="text" id="textArea01" readOnly placeholder="Введите описание задачи..."></textarea>
-                </div>
-              </form>
+    <BrowseOverlay id="popBrowse">
+      <BrowseOverlayContent>
+        <BrowseDialog>
+          <BrowseContent>
+            <BrowseTop>
+              <BrowseTitle>Название задачи</BrowseTitle>
+              <BrowseTopic $topic="Web Design">Web Design</BrowseTopic>
+            </BrowseTop>
+            <BrowseStatus>
+              <BrowseStatusLabel>Статус</BrowseStatusLabel>
+              <BrowseStatusList>
+                <BrowseStatusOption $hidden>Без статуса</BrowseStatusOption>
+                <BrowseStatusOption $active>Нужно сделать</BrowseStatusOption>
+                <BrowseStatusOption $hidden>В работе</BrowseStatusOption>
+                <BrowseStatusOption $hidden>Тестирование</BrowseStatusOption>
+                <BrowseStatusOption $hidden>Готово</BrowseStatusOption>
+              </BrowseStatusList>
+            </BrowseStatus>
+            <BrowseWrap>
+              <BrowseForm id="formBrowseCard" action="#">
+                <BrowseFormField>
+                  <BrowseFieldLabel htmlFor="textArea01">Описание задачи</BrowseFieldLabel>
+                  <BrowseTextArea name="text" id="textArea01" readOnly placeholder="Введите описание задачи..." />
+                </BrowseFormField>
+              </BrowseForm>
               <Calendar mode="browse" />
-            </div>
-            <div className="theme-down__categories theme-down">
-              <p className="categories__p subttl">Категория</p>
-              <div className="categories__theme _orange _active-category"><p className="_orange">Web Design</p></div>
-            </div>
-            <div className="pop-browse__btn-browse ">
-              <div className="btn-group">
-                <button className="btn-browse__edit _btn-bor _hover03"><a href="#">Редактировать задачу</a></button>
-                <button className="btn-browse__delete _btn-bor _hover03"><a href="#">Удалить задачу</a></button>
-              </div>
-              <button className="btn-browse__close _btn-bg _hover01"><a href="#">Закрыть</a></button>
-            </div>
-            <div className="pop-browse__btn-edit _hide">
-              <div className="btn-group">
-                <button className="btn-edit__edit _btn-bg _hover01"><a href="#">Сохранить</a></button>
-                <button className="btn-edit__edit _btn-bor _hover03"><a href="#">Отменить</a></button>
-                <button className="btn-edit__delete _btn-bor _hover03" id="btnDelete"><a href="#">Удалить задачу</a></button>
-              </div>
-              <button className="btn-edit__close _btn-bg _hover01"><a href="#">Закрыть</a></button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+            </BrowseWrap>
+            <BrowseBottomCategory>
+              <BrowseTopicLabel>Категория</BrowseTopicLabel>
+              <BrowseTopic $topic="Web Design">Web Design</BrowseTopic>
+            </BrowseBottomCategory>
+            <BrowseActions>
+              <BrowseButtons>
+                <BrowseEditButton><a href="#">Редактировать задачу</a></BrowseEditButton>
+                <BrowseEditButton><a href="#">Удалить задачу</a></BrowseEditButton>
+              </BrowseButtons>
+              <BrowseCloseButton><a href="#">Закрыть</a></BrowseCloseButton>
+            </BrowseActions>
+            <BrowseActions $hidden>
+              <BrowseButtons>
+                <BrowseCloseButton><a href="#">Сохранить</a></BrowseCloseButton>
+                <BrowseEditButton><a href="#">Отменить</a></BrowseEditButton>
+                <BrowseEditButton id="btnDelete"><a href="#">Удалить задачу</a></BrowseEditButton>
+              </BrowseButtons>
+              <BrowseCloseButton><a href="#">Закрыть</a></BrowseCloseButton>
+            </BrowseActions>
+          </BrowseContent>
+        </BrowseDialog>
+      </BrowseOverlayContent>
+    </BrowseOverlay>
   );
 }
 

@@ -1,17 +1,18 @@
 import Card from "../Card/Card.jsx";
+import { Cards, ColumnRoot, ColumnTitle } from "./Column.styled.js";
 
 function Column({ title, cards, isFirst = false }) {
   return (
-    <div className={`main__column${isFirst ? " column" : ""}`}>
-      <div className="column__title">
+    <ColumnRoot $isFirst={isFirst}>
+      <ColumnTitle>
         <p>{title}</p>
-      </div>
-      <div className="cards">
+      </ColumnTitle>
+      <Cards>
         {cards.map((card) => (
           <Card key={card.id} card={card} />
         ))}
-      </div>
-    </div>
+      </Cards>
+    </ColumnRoot>
   );
 }
 

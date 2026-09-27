@@ -1,24 +1,22 @@
 import { useState } from "react";
+import { Container } from "../../App.styled.js";
 import PopUser from "../PopUser/PopUser.jsx";
+import { CreateTaskButton, HeaderBlock, HeaderNav, HeaderRoot, Logo, UserToggle } from "./Header.styled.js";
 
 function Header() {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   return (
-    <header className="header">
-      <div className="container">
-        <div className="header__block">
-          <div className="header__logo _show _light">
+    <HeaderRoot>
+      <Container>
+        <HeaderBlock>
+          <Logo>
             <a href="" target="_self"><img src="/images/logo.png" alt="logo" /></a>
-          </div>
-          <div className="header__logo _dark">
-            <a href="" target="_self"><img src="/images/logo_dark.png" alt="logo" /></a>
-          </div>
-          <nav className="header__nav">
-            <button className="header__btn-main-new _hover01" id="btnMainNew"><a href="#popNewCard">Создать новую задачу</a></button>
-            <a
+          </Logo>
+          <HeaderNav>
+            <CreateTaskButton id="btnMainNew"><a href="#popNewCard">Создать новую задачу</a></CreateTaskButton>
+            <UserToggle
               href="#user-set-target"
-              className="header__user _hover02"
               aria-expanded={isUserMenuOpen}
               aria-controls="user-set-target"
               onClick={(event) => {
@@ -27,12 +25,12 @@ function Header() {
               }}
             >
               Ivan Ivanov
-            </a>
+            </UserToggle>
             {isUserMenuOpen && <PopUser />}
-          </nav>
-        </div>
-      </div>
-    </header>
+          </HeaderNav>
+        </HeaderBlock>
+      </Container>
+    </HeaderRoot>
   );
 }
 

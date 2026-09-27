@@ -1,39 +1,55 @@
 import Calendar from "../Calendar/Calendar.jsx";
+import {
+  CategoryLabel,
+  CategoryList,
+  CategoryOption,
+  CreateButton,
+  DescriptionInput,
+  FieldLabel,
+  FormField,
+  NewClose,
+  NewContent,
+  NewDialog,
+  NewForm,
+  NewFormLayout,
+  NewOverlay,
+  NewOverlayContent,
+  NewTitle,
+  TextInput,
+} from "./PopNewCard.styled.js";
 
 function PopNewCard() {
   return (
-    <div className="pop-new-card" id="popNewCard">
-      <div className="pop-new-card__container">
-        <div className="pop-new-card__block">
-          <div className="pop-new-card__content">
-            <h3 className="pop-new-card__ttl">Создание задачи</h3>
-            <a href="#" className="pop-new-card__close">&#10006;</a>
-            <div className="pop-new-card__wrap">
-              <form className="pop-new-card__form form-new" id="formNewCard" action="#">
-                <div className="form-new__block">
-                  <label htmlFor="formTitle" className="subttl">Название задачи</label>
-                  <input className="form-new__input" type="text" name="name" id="formTitle" placeholder="Введите название задачи..." autoFocus />
-                </div>
-                <div className="form-new__block">
-                  <label htmlFor="textArea" className="subttl">Описание задачи</label>
-                  <textarea className="form-new__area" name="text" id="textArea" placeholder="Введите описание задачи..."></textarea>
-                </div>
-              </form>
+    <NewOverlay id="popNewCard">
+      <NewOverlayContent>
+        <NewDialog>
+          <NewContent>
+            <NewTitle>Создание задачи</NewTitle>
+            <NewClose href="#">&#10006;</NewClose>
+            <NewFormLayout>
+              <NewForm id="formNewCard" action="#">
+                <FormField>
+                  <FieldLabel htmlFor="formTitle">Название задачи</FieldLabel>
+                  <TextInput type="text" name="name" id="formTitle" placeholder="Введите название задачи..." autoFocus />
+                </FormField>
+                <FormField>
+                  <FieldLabel htmlFor="textArea">Описание задачи</FieldLabel>
+                  <DescriptionInput name="text" id="textArea" placeholder="Введите описание задачи..." />
+                </FormField>
+              </NewForm>
               <Calendar />
-            </div>
-            <div className="pop-new-card__categories categories">
-              <p className="categories__p subttl">Категория</p>
-              <div className="categories__themes">
-                <div className="categories__theme _orange _active-category"><p className="_orange">Web Design</p></div>
-                <div className="categories__theme _green"><p className="_green">Research</p></div>
-                <div className="categories__theme _purple"><p className="_purple">Copywriting</p></div>
-              </div>
-            </div>
-            <button className="form-new__create _hover01" id="btnCreate">Создать задачу</button>
-          </div>
-        </div>
-      </div>
-    </div>
+            </NewFormLayout>
+            <CategoryLabel>Категория</CategoryLabel>
+            <CategoryList>
+              <CategoryOption $topic="Web Design" $active>Web Design</CategoryOption>
+              <CategoryOption $topic="Research">Research</CategoryOption>
+              <CategoryOption $topic="Copywriting">Copywriting</CategoryOption>
+            </CategoryList>
+            <CreateButton id="btnCreate">Создать задачу</CreateButton>
+          </NewContent>
+        </NewDialog>
+      </NewOverlayContent>
+    </NewOverlay>
   );
 }
 

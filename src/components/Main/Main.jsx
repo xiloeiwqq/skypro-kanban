@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import cardsData from "../../../data.js";
+import { Container } from "../../App.styled.js";
 import Column from "../Column/Column.jsx";
+import { LoadingText, MainBlock, MainContent, MainRoot } from "./Main.styled.js";
 
 const columns = [
   { title: "Без статуса", status: "Без статуса" },
@@ -20,12 +22,12 @@ function Main() {
   }, []);
 
   return (
-    <main className="main">
-      <div className="container">
-        <div className="main__block">
-          <div className="main__content">
+    <MainRoot>
+      <Container>
+        <MainBlock>
+          <MainContent>
             {isLoading ? (
-              <p className="main__loading" role="status">Данные загружаются</p>
+              <LoadingText role="status">Данные загружаются</LoadingText>
             ) : (
               columns.map((column, index) => (
                 <Column
@@ -36,10 +38,10 @@ function Main() {
                 />
               ))
             )}
-          </div>
-        </div>
-      </div>
-    </main>
+          </MainContent>
+        </MainBlock>
+      </Container>
+    </MainRoot>
   );
 }
 

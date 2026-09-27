@@ -1,14 +1,16 @@
+import { LogoutButton, ThemeCheckbox, ThemeToggleRow, UserEmail, UserName, UserPopup } from "./PopUser.styled.js";
+
 function PopUser() {
   return (
-    <div className="header__pop-user-set pop-user-set" id="user-set-target">
-      <p className="pop-user-set__name">Ivan Ivanov</p>
-      <p className="pop-user-set__mail">ivan.ivanov@gmail.com</p>
-      <div className="pop-user-set__theme">
+    <UserPopup id="user-set-target">
+      <UserName>Ivan Ivanov</UserName>
+      <UserEmail>ivan.ivanov@gmail.com</UserEmail>
+      <ThemeToggleRow>
         <p>Темная тема</p>
-        <input type="checkbox" className="checkbox" name="checkbox" />
-      </div>
-      <button type="button" className="_hover03"><a href="#popExit">Выйти</a></button>
-    </div>
+        <ThemeCheckbox className="checkbox" name="checkbox" />
+      </ThemeToggleRow>
+      <LogoutButton type="button"><a href="#popExit">Выйти</a></LogoutButton>
+    </UserPopup>
   );
 }
 
