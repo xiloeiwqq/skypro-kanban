@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Container } from "../../App.styled.js";
+import { useAuth } from "../../useAuth.js";
 import PopUser from "../PopUser/PopUser.jsx";
 import { CreateTaskButton, HeaderBlock, HeaderNav, HeaderRoot, Logo, UserToggle } from "./Header.styled.js";
 
 function Header() {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const { user } = useAuth();
   const displayName = user.name || user.login || "Пользователь";
 
   return (

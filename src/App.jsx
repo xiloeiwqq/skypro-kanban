@@ -1,15 +1,18 @@
 import { GlobalStyle, PageWrapper } from "./App.styled.js";
 import AppRoutes from "./pages/AppRoutes.jsx";
-import { TasksProvider } from "./TasksContext.jsx";
+import { AuthProvider } from "./AuthContext.jsx";
+import { TaskProvider } from "./TaskContext.jsx";
 
 function App() {
   return (
     <>
       <GlobalStyle />
       <PageWrapper>
-        <TasksProvider>
-          <AppRoutes />
-        </TasksProvider>
+        <AuthProvider>
+          <TaskProvider>
+            <AppRoutes />
+          </TaskProvider>
+        </AuthProvider>
       </PageWrapper>
     </>
   );

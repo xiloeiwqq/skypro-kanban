@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import { signUp } from "../api.js";
+import { useAuth } from "../useAuth.js";
 import {
   AuthError,
   AuthForm,
@@ -15,13 +15,14 @@ import {
 
 function SignUpPage() {
   const navigate = useNavigate();
+  const { isAuthenticated, register } = useAuth();
   const [name, setName] = useState("");
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  if (localStorage.getItem("token")) {
+  if (isAuthenticated) {
     return <Navigate to="/" replace />;
   }
 
@@ -30,9 +31,7 @@ function SignUpPage() {
     setError("");
     setIsSubmitting(true);
     try {
-      const { user } = await signUp(login, name, password);
-      localStorage.setItem("token", user.token);
-      localStorage.setItem("user", JSON.stringify(user));
+      await register(login, name, password);
       navigate("/", { replace: true });
     } catch (requestError) {
       setError(requestError.message);

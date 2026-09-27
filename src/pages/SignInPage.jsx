@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import { signIn } from "../api.js";
+import { useAuth } from "../useAuth.js";
 import {
   AuthForm,
   AuthError,
@@ -15,12 +15,13 @@ import {
 
 function SignInPage() {
   const navigate = useNavigate();
+  const { isAuthenticated, login: authenticate } = useAuth();
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  if (localStorage.getItem("token")) {
+  if (isAuthenticated) {
     return <Navigate to="/" replace />;
   }
 
@@ -29,9 +30,7 @@ function SignInPage() {
     setError("");
     setIsSubmitting(true);
     try {
-      const { user } = await signIn(login, password);
-      localStorage.setItem("token", user.token);
-      localStorage.setItem("user", JSON.stringify(user));
+      await authenticate(login, password);
       navigate("/", { replace: true });
     } catch (requestError) {
       setError(requestError.message);

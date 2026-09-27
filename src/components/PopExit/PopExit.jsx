@@ -1,12 +1,13 @@
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../useAuth.js";
 import { ExitActions, ExitDialog, ExitNoButton, ExitOverlay, ExitOverlayContent, ExitTitle, ExitYesButton } from "./PopExit.styled.js";
 
 function PopExit() {
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   function handleLogout() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    logout();
     navigate("/login", { replace: true });
   }
 

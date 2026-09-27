@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "../../useAuth.js";
 import { LogoutButton, ThemeCheckbox, ThemeToggleRow, UserEmail, UserName, UserPopup } from "./PopUser.styled.js";
 
 function PopUser() {
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const { user } = useAuth();
 
   return (
     <UserPopup id="user-set-target">
