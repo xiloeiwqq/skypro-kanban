@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { LogoutButton, ThemeCheckbox, ThemeToggleRow, UserEmail, UserName, UserPopup } from "./PopUser.styled.js";
 
 function PopUser() {
@@ -9,7 +10,7 @@ function PopUser() {
         <p>Темная тема</p>
         <ThemeCheckbox className="checkbox" name="checkbox" />
       </ThemeToggleRow>
-      <LogoutButton type="button"><a href="#popExit">Выйти</a></LogoutButton>
+      <LogoutButton as={Link} to="/logout">Выйти</LogoutButton>
     </UserPopup>
   );
 }

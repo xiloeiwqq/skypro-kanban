@@ -1,3 +1,4 @@
+import { Link, useNavigate } from "react-router-dom";
 import Calendar from "../Calendar/Calendar.jsx";
 import {
   CategoryLabel,
@@ -19,13 +20,15 @@ import {
 } from "./PopNewCard.styled.js";
 
 function PopNewCard() {
+  const navigate = useNavigate();
+
   return (
     <NewOverlay id="popNewCard">
       <NewOverlayContent>
         <NewDialog>
           <NewContent>
             <NewTitle>Создание задачи</NewTitle>
-            <NewClose href="#">&#10006;</NewClose>
+            <NewClose as={Link} to="/" aria-label="Закрыть">&#10006;</NewClose>
             <NewFormLayout>
               <NewForm id="formNewCard" action="#">
                 <FormField>
@@ -45,7 +48,7 @@ function PopNewCard() {
               <CategoryOption $topic="Research">Research</CategoryOption>
               <CategoryOption $topic="Copywriting">Copywriting</CategoryOption>
             </CategoryList>
-            <CreateButton id="btnCreate">Создать задачу</CreateButton>
+            <CreateButton id="btnCreate" type="button" onClick={() => navigate("/")}>Создать задачу</CreateButton>
           </NewContent>
         </NewDialog>
       </NewOverlayContent>

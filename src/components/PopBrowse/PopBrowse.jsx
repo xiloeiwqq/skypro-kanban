@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Calendar from "../Calendar/Calendar.jsx";
 import {
   BrowseActions,
@@ -24,7 +25,7 @@ import {
   BrowseWrap,
 } from "./PopBrowse.styled.js";
 
-function PopBrowse() {
+function PopBrowse({ taskId, editable = false }) {
   return (
     <BrowseOverlay id="popBrowse">
       <BrowseOverlayContent>
@@ -48,7 +49,7 @@ function PopBrowse() {
               <BrowseForm id="formBrowseCard" action="#">
                 <BrowseFormField>
                   <BrowseFieldLabel htmlFor="textArea01">Описание задачи</BrowseFieldLabel>
-                  <BrowseTextArea name="text" id="textArea01" readOnly placeholder="Введите описание задачи..." />
+                  <BrowseTextArea name="text" id="textArea01" readOnly={!editable} placeholder="Введите описание задачи..." />
                 </BrowseFormField>
               </BrowseForm>
               <Calendar mode="browse" />
@@ -59,18 +60,18 @@ function PopBrowse() {
             </BrowseBottomCategory>
             <BrowseActions>
               <BrowseButtons>
-                <BrowseEditButton><a href="#">Редактировать задачу</a></BrowseEditButton>
-                <BrowseEditButton><a href="#">Удалить задачу</a></BrowseEditButton>
+                <BrowseEditButton as={Link} to={`/tasks/${taskId}/edit`}>Редактировать задачу</BrowseEditButton>
+                <BrowseEditButton as={Link} to="/">Удалить задачу</BrowseEditButton>
               </BrowseButtons>
-              <BrowseCloseButton><a href="#">Закрыть</a></BrowseCloseButton>
+              <BrowseCloseButton as={Link} to="/">Закрыть</BrowseCloseButton>
             </BrowseActions>
-            <BrowseActions $hidden>
+            <BrowseActions $hidden={!editable}>
               <BrowseButtons>
-                <BrowseCloseButton><a href="#">Сохранить</a></BrowseCloseButton>
-                <BrowseEditButton><a href="#">Отменить</a></BrowseEditButton>
-                <BrowseEditButton id="btnDelete"><a href="#">Удалить задачу</a></BrowseEditButton>
+                <BrowseCloseButton as={Link} to={`/tasks/${taskId}`}>Сохранить</BrowseCloseButton>
+                <BrowseEditButton as={Link} to={`/tasks/${taskId}`}>Отменить</BrowseEditButton>
+                <BrowseEditButton as={Link} id="btnDelete" to="/">Удалить задачу</BrowseEditButton>
               </BrowseButtons>
-              <BrowseCloseButton><a href="#">Закрыть</a></BrowseCloseButton>
+              <BrowseCloseButton as={Link} to="/">Закрыть</BrowseCloseButton>
             </BrowseActions>
           </BrowseContent>
         </BrowseDialog>

@@ -5,7 +5,7 @@ export const BrowseOverlay = styled.div`
   z-index: 7;
   top: 0;
   left: 0;
-  display: none;
+  display: block;
   width: 100%;
   min-width: 375px;
   min-height: 100vh;

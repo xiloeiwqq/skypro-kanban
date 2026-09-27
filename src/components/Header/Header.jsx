@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Container } from "../../App.styled.js";
 import PopUser from "../PopUser/PopUser.jsx";
 import { CreateTaskButton, HeaderBlock, HeaderNav, HeaderRoot, Logo, UserToggle } from "./Header.styled.js";
@@ -11,10 +12,10 @@ function Header() {
       <Container>
         <HeaderBlock>
           <Logo>
-            <a href="" target="_self"><img src="/images/logo.png" alt="logo" /></a>
+            <Link to="/"><img src="/images/logo.png" alt="logo" /></Link>
           </Logo>
           <HeaderNav>
-            <CreateTaskButton id="btnMainNew"><a href="#popNewCard">Создать новую задачу</a></CreateTaskButton>
+            <CreateTaskButton as={Link} id="btnMainNew" to="/tasks/new">Создать новую задачу</CreateTaskButton>
             <UserToggle
               href="#user-set-target"
               aria-expanded={isUserMenuOpen}

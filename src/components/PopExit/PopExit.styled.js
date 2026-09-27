@@ -5,7 +5,7 @@ export const ExitOverlay = styled.div`
   z-index: 5;
   top: 0;
   left: 0;
-  display: none;
+  display: block;
   width: 100%;
   min-width: 320px;
   min-height: 100vh;
