@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const MainRoot = styled.main`
   width: 100%;
-  background-color: #eaEEF6;
+  background-color: #eaeef6;
 `;
 
 export const MainBlock = styled.div`
@@ -24,7 +24,46 @@ export const MainContent = styled.div`
   }
 `;
 
-export const LoadingText = styled.p`
+export const LoadingIndicator = styled.div`
+  display: flex;
+  width: 100%;
+  min-height: calc(100vh - 134px);
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+  span {
+    width: 14px;
+    height: 14px;
+    border: 2px solid #94a6be;
+    border-radius: 50%;
+    animation: loadingPulse 1.1s ease-in-out infinite;
+  }
+
+  span:nth-child(2) {
+    animation-delay: 0.15s;
+  }
+
+  span:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+
+  @keyframes loadingPulse {
+    0%,
+    80%,
+    100% {
+      transform: scale(0.65);
+      opacity: 0.45;
+    }
+
+    40% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+`;
+
+export const EmptyState = styled.p`
   display: flex;
   width: 100%;
   min-height: calc(100vh - 134px);

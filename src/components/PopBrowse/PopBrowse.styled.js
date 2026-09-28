@@ -141,11 +141,17 @@ export const BrowseStatusOption = styled.div`
   cursor: pointer;
   letter-spacing: -0.14px;
   display: ${({ $hidden }) => ($hidden ? "none" : "block")};
-  ${({ $active }) => $active && css`
-    border-color: #94a6be;
-    background: #94a6be;
-    color: #ffffff;
-  `}
+
+  &:disabled {
+    cursor: default;
+  }
+  ${({ $active }) =>
+    $active &&
+    css`
+      border-color: #94a6be;
+      background: #94a6be;
+      color: #ffffff;
+    `}
 `;
 
 export const BrowseWrap = styled.div`
@@ -190,7 +196,7 @@ export const BrowseTextArea = styled.textarea`
   outline: none;
   border: 0.7px solid rgba(148, 166, 190, 0.4);
   border-radius: 8px;
-  background: #eaEEF6;
+  background: #eaeef6;
   font-size: 14px;
   line-height: 1;
 

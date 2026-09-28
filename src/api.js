@@ -3,12 +3,22 @@ const API_URL = "https://wedev-api.sky.pro/api";
 async function request(path, { token, ...options } = {}) {
   const headers = new Headers(options.headers);
   if (token) headers.set("Authorization", `Bearer ${token}`);
+  if (options.body) headers.set("Content-Type", "application/json");
 
-  const response = await fetch(`${API_URL}${path}`, { ...options, headers });
+  let response;
+  try {
+    response = await fetch(`${API_URL}${path}`, { ...options, headers });
+  } catch {
+    throw new Error(
+      "Не удалось связаться с сервером. Проверьте подключение и попробуйте еще раз.",
+    );
+  }
   const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {
-    throw new Error(data.message || data.error || `Ошибка запроса: ${response.status}`);
+    throw new Error(
+      data.message || data.error || `Ошибка запроса: ${response.status}`,
+    );
   }
 
   return data;

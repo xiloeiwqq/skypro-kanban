@@ -33,8 +33,16 @@ function PopBrowse({ taskId, editable = false }) {
   const { getTaskById, updateTask, deleteTask } = useTasks();
   const [task, setTask] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState("");
-  const statuses = ["Без статуса", "Нужно сделать", "В работе", "Тестирование", "Готово"];
+  const statuses = [
+    "Без статуса",
+    "Нужно сделать",
+    "В работе",
+    "Тестирование",
+    "Готово",
+  ];
 
   useEffect(() => {
     let isCurrent = true;
@@ -57,27 +65,40 @@ function PopBrowse({ taskId, editable = false }) {
   async function handleSave(event) {
     event.preventDefault();
     setError("");
+    const title = task.title.trim();
+    const description = (task.description || "").trim();
+    if (!title || !description) {
+      setError("Название и описание задачи не могут быть пустыми.");
+      return;
+    }
+
+    setIsSaving(true);
     try {
       await updateTask(taskId, {
-        title: task.title,
+        title,
         topic: task.topic,
         status: task.status,
-        description: task.description || "",
+        description,
         date: task.date,
       });
       navigate(`/tasks/${taskId}`, { replace: true });
     } catch (requestError) {
       setError(requestError.message);
+    } finally {
+      setIsSaving(false);
     }
   }
 
   async function handleDelete() {
     setError("");
+    setIsDeleting(true);
     try {
       await deleteTask(taskId);
       navigate("/", { replace: true });
     } catch (requestError) {
       setError(requestError.message);
+    } finally {
+      setIsDeleting(false);
     }
   }
 
@@ -92,7 +113,9 @@ function PopBrowse({ taskId, editable = false }) {
               <>
                 <BrowseTitle>Не удалось загрузить задачу</BrowseTitle>
                 {error && <BrowseError role="alert">{error}</BrowseError>}
-                <BrowseCloseButton as={Link} to="/">Закрыть</BrowseCloseButton>
+                <BrowseCloseButton as={Link} to="/">
+                  Закрыть
+                </BrowseCloseButton>
               </>
             ) : (
               <>
@@ -103,32 +126,40 @@ function PopBrowse({ taskId, editable = false }) {
                 <BrowseStatus>
                   <BrowseStatusLabel>Статус</BrowseStatusLabel>
                   <BrowseStatusList>
-                    {statuses.map((status) => (
-                      (editable || task.status === status) && (
-                        <BrowseStatusOption
-                          as="button"
-                          type="button"
-                          key={status}
-                          $active={task.status === status}
-                          onClick={() => editable && setTask({ ...task, status })}
-                        >
-                          {status}
-                        </BrowseStatusOption>
-                      )
-                    ))}
+                    {statuses.map(
+                      (status) =>
+                        (editable || task.status === status) && (
+                          <BrowseStatusOption
+                            as="button"
+                            type="button"
+                            key={status}
+                            $active={task.status === status}
+                            disabled={!editable || isSaving || isDeleting}
+                            onClick={() =>
+                              editable && setTask({ ...task, status })
+                            }
+                          >
+                            {status}
+                          </BrowseStatusOption>
+                        ),
+                    )}
                   </BrowseStatusList>
                 </BrowseStatus>
                 <BrowseWrap>
                   <BrowseForm id="formBrowseCard" onSubmit={handleSave}>
                     <BrowseFormField>
-                      <BrowseFieldLabel htmlFor="textArea01">Описание задачи</BrowseFieldLabel>
+                      <BrowseFieldLabel htmlFor="textArea01">
+                        Описание задачи
+                      </BrowseFieldLabel>
                       <BrowseTextArea
                         name="description"
                         id="textArea01"
                         readOnly={!editable}
                         placeholder="Введите описание задачи..."
                         value={task.description || ""}
-                        onChange={(event) => setTask({ ...task, description: event.target.value })}
+                        onChange={(event) =>
+                          setTask({ ...task, description: event.target.value })
+                        }
                       />
                     </BrowseFormField>
                   </BrowseForm>
@@ -141,18 +172,46 @@ function PopBrowse({ taskId, editable = false }) {
                 {error && <BrowseError role="alert">{error}</BrowseError>}
                 <BrowseActions $hidden={editable}>
                   <BrowseButtons>
-                    <BrowseEditButton as={Link} to={`/tasks/${taskId}/edit`}>Редактировать задачу</BrowseEditButton>
-                    <BrowseEditButton type="button" onClick={handleDelete}>Удалить задачу</BrowseEditButton>
+                    <BrowseEditButton as={Link} to={`/tasks/${taskId}/edit`}>
+                      Редактировать задачу
+                    </BrowseEditButton>
+                    <BrowseEditButton
+                      type="button"
+                      onClick={handleDelete}
+                      disabled={isDeleting || isSaving}
+                    >
+                      {isDeleting ? "Удаляем..." : "Удалить задачу"}
+                    </BrowseEditButton>
                   </BrowseButtons>
-                  <BrowseCloseButton as={Link} to="/">Закрыть</BrowseCloseButton>
+                  <BrowseCloseButton as={Link} to="/">
+                    Закрыть
+                  </BrowseCloseButton>
                 </BrowseActions>
                 <BrowseActions $hidden={!editable}>
                   <BrowseButtons>
-                    <BrowseCloseButton as="button" type="submit" form="formBrowseCard">Сохранить</BrowseCloseButton>
-                    <BrowseEditButton as={Link} to={`/tasks/${taskId}`}>Отменить</BrowseEditButton>
-                    <BrowseEditButton type="button" id="btnDelete" onClick={handleDelete}>Удалить задачу</BrowseEditButton>
+                    <BrowseCloseButton
+                      as="button"
+                      type="submit"
+                      form="formBrowseCard"
+                      disabled={isSaving || isDeleting}
+                    >
+                      {isSaving ? "Сохраняем..." : "Сохранить"}
+                    </BrowseCloseButton>
+                    <BrowseEditButton as={Link} to={`/tasks/${taskId}`}>
+                      Отменить
+                    </BrowseEditButton>
+                    <BrowseEditButton
+                      type="button"
+                      id="btnDelete"
+                      onClick={handleDelete}
+                      disabled={isSaving || isDeleting}
+                    >
+                      {isDeleting ? "Удаляем..." : "Удалить задачу"}
+                    </BrowseEditButton>
                   </BrowseButtons>
-                  <BrowseCloseButton as={Link} to="/">Закрыть</BrowseCloseButton>
+                  <BrowseCloseButton as={Link} to="/">
+                    Закрыть
+                  </BrowseCloseButton>
                 </BrowseActions>
               </>
             )}

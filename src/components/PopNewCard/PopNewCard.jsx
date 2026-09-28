@@ -34,11 +34,18 @@ function PopNewCard() {
   async function handleSubmit(event) {
     event.preventDefault();
     setError("");
+    const trimmedTitle = title.trim();
+    const trimmedDescription = description.trim();
+    if (!trimmedTitle || !trimmedDescription) {
+      setError("Заполните название и описание задачи.");
+      return;
+    }
+
     setIsSubmitting(true);
     try {
       await createTask({
-        title: title.trim(),
-        description: description.trim(),
+        title: trimmedTitle,
+        description: trimmedDescription,
         topic,
         status: "Без статуса",
         date: new Date().toISOString(),
@@ -57,16 +64,34 @@ function PopNewCard() {
         <NewDialog>
           <NewContent>
             <NewTitle>Создание задачи</NewTitle>
-            <NewClose as={Link} to="/" aria-label="Закрыть">&#10006;</NewClose>
+            <NewClose as={Link} to="/" aria-label="Закрыть">
+              &#10006;
+            </NewClose>
             <NewFormLayout>
               <NewForm id="formNewCard" onSubmit={handleSubmit}>
                 <FormField>
                   <FieldLabel htmlFor="formTitle">Название задачи</FieldLabel>
-                  <TextInput type="text" name="title" id="formTitle" placeholder="Введите название задачи..." value={title} onChange={(event) => setTitle(event.target.value)} required autoFocus />
+                  <TextInput
+                    type="text"
+                    name="title"
+                    id="formTitle"
+                    placeholder="Введите название задачи..."
+                    value={title}
+                    onChange={(event) => setTitle(event.target.value)}
+                    required
+                    autoFocus
+                  />
                 </FormField>
                 <FormField>
                   <FieldLabel htmlFor="textArea">Описание задачи</FieldLabel>
-                  <DescriptionInput name="description" id="textArea" placeholder="Введите описание задачи..." value={description} onChange={(event) => setDescription(event.target.value)} />
+                  <DescriptionInput
+                    name="description"
+                    id="textArea"
+                    placeholder="Введите описание задачи..."
+                    value={description}
+                    onChange={(event) => setDescription(event.target.value)}
+                    required
+                  />
                 </FormField>
               </NewForm>
               <Calendar />
@@ -74,13 +99,27 @@ function PopNewCard() {
             <CategoryLabel>Категория</CategoryLabel>
             <CategoryList>
               {["Web Design", "Research", "Copywriting"].map((category) => (
-                <CategoryOption as="button" type="button" key={category} $topic={category} $active={topic === category} onClick={() => setTopic(category)}>
+                <CategoryOption
+                  as="button"
+                  type="button"
+                  key={category}
+                  $topic={category}
+                  $active={topic === category}
+                  onClick={() => setTopic(category)}
+                >
                   {category}
                 </CategoryOption>
               ))}
             </CategoryList>
             {error && <NewError role="alert">{error}</NewError>}
-            <CreateButton id="btnCreate" type="submit" form="formNewCard" disabled={isSubmitting}>{isSubmitting ? "Создаем..." : "Создать задачу"}</CreateButton>
+            <CreateButton
+              id="btnCreate"
+              type="submit"
+              form="formNewCard"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Создаем..." : "Создать задачу"}
+            </CreateButton>
           </NewContent>
         </NewDialog>
       </NewOverlayContent>

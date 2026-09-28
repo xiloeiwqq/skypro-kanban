@@ -33,13 +33,16 @@ jsx = jsx.replace(/\scolspan=/g, " colSpan=");
 jsx = jsx.replace(/\srowspan=/g, " rowSpan=");
 jsx = jsx.replace(/\sdatetime=/g, " dateTime=");
 
-jsx = jsx.replace(/<(input|img|br|hr|meta|link)([^>]*?)>/gi, (_m, tag, attrs) => {
-  const trimmed = attrs.trimEnd();
-  if (trimmed.endsWith("/")) {
-    return `<${tag}${attrs}>`;
-  }
-  return `<${tag}${attrs} />`;
-});
+jsx = jsx.replace(
+  /<(input|img|br|hr|meta|link)([^>]*?)>/gi,
+  (_m, tag, attrs) => {
+    const trimmed = attrs.trimEnd();
+    if (trimmed.endsWith("/")) {
+      return `<${tag}${attrs}>`;
+    }
+    return `<${tag}${attrs} />`;
+  },
+);
 
 jsx = jsx.replace(/src="images\//g, 'src="/images/');
 

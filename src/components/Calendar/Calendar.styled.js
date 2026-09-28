@@ -131,17 +131,21 @@ export const CalendarCell = styled.div`
   opacity: ${({ $otherMonth }) => ($otherMonth ? 0 : 1)};
   font-weight: ${({ $current }) => ($current ? 700 : 400)};
 
-  ${({ $otherMonth }) => !$otherMonth && css`
-    &:hover {
-      color: #94a6be;
-      background-color: #eaEEF6;
-    }
-  `}
+  ${({ $otherMonth }) =>
+    !$otherMonth &&
+    css`
+      &:hover {
+        color: #94a6be;
+        background-color: #eaeef6;
+      }
+    `}
 
-  ${({ $active }) => $active && css`
-    background-color: #94a6be;
-    color: #ffffff;
-  `}
+  ${({ $active }) =>
+    $active &&
+    css`
+      background-color: #94a6be;
+      color: #ffffff;
+    `}
 
   @media screen and (max-width: 660px) {
     width: 42px;

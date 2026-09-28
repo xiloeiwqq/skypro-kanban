@@ -33,29 +33,50 @@ export function TaskProvider({ children }) {
     }
   }, [token]);
 
-  const getTaskById = useCallback(async (taskId) => {
-    const data = await api.getTask(token, taskId);
-    return normalizeTask(data.task);
-  }, [token]);
+  const getTaskById = useCallback(
+    async (taskId) => {
+      const data = await api.getTask(token, taskId);
+      return normalizeTask(data.task);
+    },
+    [token],
+  );
 
-  const createTask = useCallback(async (task) => {
-    const data = await api.createTask(token, task);
-    setTaskData({ token, tasks: normalizeTasks(data) });
-  }, [token]);
+  const createTask = useCallback(
+    async (task) => {
+      const data = await api.createTask(token, task);
+      setTaskData({ token, tasks: normalizeTasks(data) });
+    },
+    [token],
+  );
 
-  const updateTask = useCallback(async (taskId, task) => {
-    const data = await api.updateTask(token, taskId, task);
-    setTaskData({ token, tasks: normalizeTasks(data) });
-  }, [token]);
+  const updateTask = useCallback(
+    async (taskId, task) => {
+      const data = await api.updateTask(token, taskId, task);
+      setTaskData({ token, tasks: normalizeTasks(data) });
+    },
+    [token],
+  );
 
-  const deleteTask = useCallback(async (taskId) => {
-    const data = await api.deleteTask(token, taskId);
-    setTaskData({ token, tasks: normalizeTasks(data) });
-  }, [token]);
+  const deleteTask = useCallback(
+    async (taskId) => {
+      const data = await api.deleteTask(token, taskId);
+      setTaskData({ token, tasks: normalizeTasks(data) });
+    },
+    [token],
+  );
 
   return (
     <TaskContext.Provider
-      value={{ tasks, isLoading, error, loadTasks, getTaskById, createTask, updateTask, deleteTask }}
+      value={{
+        tasks,
+        isLoading,
+        error,
+        loadTasks,
+        getTaskById,
+        createTask,
+        updateTask,
+        deleteTask,
+      }}
     >
       {children}
     </TaskContext.Provider>

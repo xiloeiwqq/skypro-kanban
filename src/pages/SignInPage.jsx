@@ -28,9 +28,15 @@ function SignInPage() {
   async function handleSubmit(event) {
     event.preventDefault();
     setError("");
+    const normalizedLogin = login.trim();
+    if (!normalizedLogin || !password.trim()) {
+      setError("Введите логин и пароль.");
+      return;
+    }
+
     setIsSubmitting(true);
     try {
-      await authenticate(login, password);
+      await authenticate(normalizedLogin, password);
       navigate("/", { replace: true });
     } catch (requestError) {
       setError(requestError.message);
@@ -44,13 +50,31 @@ function SignInPage() {
       <AuthPanel>
         <AuthTitle>Вход</AuthTitle>
         <AuthForm onSubmit={handleSubmit}>
-          <AuthInput type="text" name="login" placeholder="Эл. почта или логин" autoComplete="username" value={login} onChange={(event) => setLogin(event.target.value)} required />
-          <AuthInput type="password" name="password" placeholder="Пароль" value={password} onChange={(event) => setPassword(event.target.value)} required />
+          <AuthInput
+            type="text"
+            name="login"
+            placeholder="Эл. почта или логин"
+            autoComplete="username"
+            value={login}
+            onChange={(event) => setLogin(event.target.value)}
+            required
+          />
+          <AuthInput
+            type="password"
+            name="password"
+            placeholder="Пароль"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            required
+          />
           {error && <AuthError role="alert">{error}</AuthError>}
-          <AuthSubmit type="submit" disabled={isSubmitting}>{isSubmitting ? "Входим..." : "Войти"}</AuthSubmit>
+          <AuthSubmit type="submit" disabled={isSubmitting}>
+            {isSubmitting ? "Входим..." : "Войти"}
+          </AuthSubmit>
         </AuthForm>
         <AuthPrompt>
-          Нужно зарегистрироваться? <AuthLink to="/register">Регистрируйтесь здесь</AuthLink>
+          Нужно зарегистрироваться?{" "}
+          <AuthLink to="/register">Регистрируйтесь здесь</AuthLink>
         </AuthPrompt>
       </AuthPanel>
     </AuthPage>

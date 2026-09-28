@@ -50,7 +50,7 @@ export const ThemeCheckbox = styled.input.attrs({ type: "checkbox" })`
   appearance: none;
   border-radius: 100px;
   outline: none;
-  background: #eaeeF6;
+  background: #eaeef6;
 
   &::before {
     position: absolute;

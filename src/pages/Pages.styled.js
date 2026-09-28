@@ -91,15 +91,39 @@ export const NotFound = styled.main`
   min-height: 100vh;
   align-content: center;
   justify-items: center;
-  gap: 16px;
   padding: 24px;
+  background: #eaedf5;
   text-align: center;
+`;
+
+export const NotFoundContent = styled.section`
+  display: flex;
+  width: 100%;
+  max-width: 368px;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 36px 32px;
+  border: 1px solid #d4dbe5;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 4px 40px -16px rgba(0, 0, 0, 0.2);
 
   h1 {
+    color: #000000;
     font-size: 32px;
   }
 
   p {
+    color: #64748b;
+  }
+
+  a {
+    color: #565eef;
+    text-decoration: underline;
+  }
+
+  a:hover {
     color: #64748b;
   }
 `;

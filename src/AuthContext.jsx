@@ -21,17 +21,30 @@ export function AuthProvider({ children }) {
     setUser(authenticatedUser);
   }, []);
 
-  const login = useCallback(async (loginValue, password) => {
-    const { user: authenticatedUser } = await api.signIn(loginValue, password);
-    saveUser(authenticatedUser);
-    return authenticatedUser;
-  }, [saveUser]);
+  const login = useCallback(
+    async (loginValue, password) => {
+      const { user: authenticatedUser } = await api.signIn(
+        loginValue,
+        password,
+      );
+      saveUser(authenticatedUser);
+      return authenticatedUser;
+    },
+    [saveUser],
+  );
 
-  const register = useCallback(async (loginValue, name, password) => {
-    const { user: authenticatedUser } = await api.signUp(loginValue, name, password);
-    saveUser(authenticatedUser);
-    return authenticatedUser;
-  }, [saveUser]);
+  const register = useCallback(
+    async (loginValue, name, password) => {
+      const { user: authenticatedUser } = await api.signUp(
+        loginValue,
+        name,
+        password,
+      );
+      saveUser(authenticatedUser);
+      return authenticatedUser;
+    },
+    [saveUser],
+  );
 
   const logout = useCallback(() => {
     localStorage.removeItem("token");
@@ -41,7 +54,16 @@ export function AuthProvider({ children }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, token, isAuthenticated: Boolean(token), login, register, logout }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        token,
+        isAuthenticated: Boolean(token),
+        login,
+        register,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
