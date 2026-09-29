@@ -236,14 +236,16 @@ export const BrowseActions = styled.div`
   align-items: flex-start;
   justify-content: space-between;
 
-  button {
+  button,
+  a {
     height: 30px;
     margin-bottom: 10px;
     padding: 0 14px;
   }
 
   @media screen and (max-width: 495px) {
-    button {
+    button,
+    a {
       width: 100%;
       height: 40px;
     }
@@ -258,21 +260,30 @@ export const BrowseButtons = styled.div`
   display: flex;
   flex-wrap: wrap;
 
-  button {
+  button,
+  a {
     margin-right: 8px;
   }
 
   @media screen and (max-width: 495px) {
-    button {
+    button,
+    a {
       margin-right: 0;
     }
   }
 `;
 
 const BrowseButtonBase = css`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 4px;
   outline: none;
-  font: inherit;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  white-space: nowrap;
 
   a {
     display: flex;

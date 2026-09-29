@@ -3,7 +3,6 @@ const API_URL = "https://wedev-api.sky.pro/api";
 async function request(path, { token, ...options } = {}) {
   const headers = new Headers(options.headers);
   if (token) headers.set("Authorization", `Bearer ${token}`);
-  if (options.body) headers.set("Content-Type", "application/json");
 
   let response;
   try {
